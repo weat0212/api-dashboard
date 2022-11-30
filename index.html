@@ -11,17 +11,21 @@
 
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/style.css">
   <meta name="theme-color" content="#fafafa">
 </head>
 
 <body>
-  <h2>API關聯圖</h2>
-  <input type="file" id="file-selector"/>
-  <input type="checkbox" id="visibility">隱藏
-  <button onclick="upload();">畫圖</button>
+  <div>API關聯圖</div>
+  <div><input type="file" id="file-selector"/></div>
+  <div>
+    <button onclick="upload();">畫圖</button>
+    <label for="visibility">
+      <input type="checkbox" id="visibility">隱藏
+    </label>
+  </div>
 
   <div class="wrapper">
-
     <div id="container">
       <div id="graph"></div>
       <div id="detail"></div>

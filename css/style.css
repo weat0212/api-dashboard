@@ -1,0 +1,16 @@
+* {
+    font: 18px "Fira Sans", sans-serif;
+}
+
+body {
+    align-content: center;
+    justify-content: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+div {
+    padding: 0.25rem;
+}
