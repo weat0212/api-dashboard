@@ -1,0 +1,60 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title>API關聯圖</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+  <h2>API關聯圖</h2>
+  <input type="file" id="file-selector"/>
+  <input type="checkbox" id="visibility">隱藏
+  <button onclick="upload();">畫圖</button>
+
+  <div class="wrapper">
+
+    <div id="container">
+      <div id="graph"></div>
+      <div id="detail"></div>
+    </div>
+  </div>
+</body>
+
+<script>
+  // 讀檔
+  const fileSelector = document.getElementById('file-selector');
+
+  let fileList;
+  fileSelector.addEventListener('change', (event) => {
+    fileList = event.target.files;
+    console.log(fileList);
+  });
+
+  function upload() {
+    const visibility = document.getElementById('visibility').checked;
+    try {
+      excelReader(fileList[0]).then(graph => {
+        draw(graph[0], visibility);
+      })
+    } catch (ex) {
+      alert('未選擇檔案');
+    }
+  }
+
+</script>
+
+<script src="https://unpkg.com/force-graph"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+<script src="js/relation-graph.js"></script>
+<script src="js/xlsx-reader.js"></script>
+</html>
