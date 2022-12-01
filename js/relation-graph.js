@@ -19,6 +19,11 @@ function draw(graphObj) {
     console.log("開始畫圖...");
     data = graphDataBuilder(graphObj);
 
+    // 反白節點/關聯
+    const highlightNodes = new Set();
+    const highlightLinks = new Set();
+    let hoverNode = null;
+
     Graph(graph)
         .graphData(data)
         .backgroundColor('#f8f9fa')
@@ -32,6 +37,28 @@ function draw(graphObj) {
             Graph.centerAt(node.x, node.y, 1000);
             Graph.zoom(8, 1500);
         })
+        .onNodeHover(node => {
+            highlightNodes.clear();
+            highlightLinks.clear();
+            if (node) {
+                highlightNodes.add(node);
+                node.neighbors.forEach(neighbor => highlightNodes.add(neighbor));
+                node.links.forEach(link => highlightLinks.add(link));
+            }
+
+            hoverNode = node || null;
+        })
+        .onLinkHover(link => {
+            highlightNodes.clear();
+            highlightLinks.clear();
+
+            if (link) {
+                highlightLinks.add(link);
+                highlightNodes.add(link.source);
+                highlightNodes.add(link.target);
+            }
+        })
+        .autoPauseRedraw(false)
         .nodeAutoColorBy('controller')
         .nodeLabel('memo')
         .nodeCanvasObject((node, ctx, globalScale) => {
@@ -41,11 +68,10 @@ function draw(graphObj) {
             const textWidth = ctx.measureText(label).width;
             const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); // some padding
 
-            ctx.fillStyle = 'rgba(255, 255, 255, 1)';
-
             // 圖形
+            const isSelected = node === hoverNode;
+            ctx.fillStyle = isSelected ? 'rgba(255, 255, 0, 0.5)' : 'rgba(255, 255, 255, 0.8)';
             ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
-
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillStyle = node.color;
@@ -58,10 +84,11 @@ function draw(graphObj) {
             const bckgDimensions = node.__bckgDimensions;
             bckgDimensions && ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
         })
-        .linkWidth(3)
+        .linkWidth(link => highlightLinks.has(link) ? 5 : 1)
+        .linkDirectionalParticleWidth(link => highlightLinks.has(link) ? 4 : 0)
         .linkDirectionalArrowLength(3)
-        .linkDirectionalParticles(1)
-        .linkDirectionalParticleSpeed(0.005);
+        .linkDirectionalParticles(5)
+        .linkDirectionalParticleSpeed(0.004);
 
     adjustGraphSize(Graph)
     window.addEventListener('resize', () => {
@@ -105,6 +132,8 @@ function graphDataBuilder(graphs) {
                         "serviceId": ref,
                         "controller": 'reference',
                         "memo": '功能項',
+                        "neighbors": [],
+                        "links": [],
                     };
                     let existed = nodes.filter(n => n.id === ref).length > 0;
                     if (!existed) {
@@ -128,6 +157,17 @@ function graphDataBuilder(graphs) {
         })
     }
 
+    // 記住鄰居節點
+    links.forEach(link => {
+        const a = nodes.filter(n => n.id === link.source)[0];
+        const b = nodes.filter(n => n.id === link.target)[0];
+
+        a.neighbors.push(b);
+        b.neighbors.push(a);
+        a.links.push(link);
+        b.links.push(link);
+    });
+
     return {nodes, links};
 }
 
@@ -150,6 +190,8 @@ function getNodeFrom(graph) {
         "isOpenOutside": graph.isOpenOutside,
         "memo": graph.memo,
         "Reference": graph.Reference,
+        "neighbors": [],
+        "links": []
     };
 }
 
