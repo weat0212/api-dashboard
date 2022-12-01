@@ -30,7 +30,7 @@ function draw(graphObj) {
             }
             // Center/zoom on node
             Graph.centerAt(node.x, node.y, 1000);
-            Graph.zoom(8, 2000);
+            Graph.zoom(8, 1500);
         })
         .nodeAutoColorBy('controller')
         .nodeLabel('memo')
@@ -59,18 +59,14 @@ function draw(graphObj) {
             bckgDimensions && ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
         })
         .linkWidth(3)
-        .linkDirectionalArrowLength(8)
+        .linkDirectionalArrowLength(3)
         .linkDirectionalParticles(1)
-        .linkDirectionalParticleSpeed(d => 0.005);
+        .linkDirectionalParticleSpeed(0.005);
 
     adjustGraphSize(Graph)
     window.addEventListener('resize', () => {
         adjustGraphSize(Graph)
     });
-
-    if (hide.checked) {
-        graph.zoom(3, 2000);
-    }
 }
 
 function removeChildren(dom) {
@@ -97,29 +93,25 @@ function graphDataBuilder(graphs) {
     for (let graph of graphs) {
         if (!graph.serviceId) { continue; }
 
-        nodes.push({
-            "id": graph.serviceId,
-            "serviceId": graph.serviceId,
-            "name": graph.func,
-            "path": graph.path,
-            "project": graph.project,
-            "contextPath": graph.contextPath,
-            "controller": graph.controller,
-            "method": graph.method,
-            "api": graph.api,
-            "isOpenOutside": graph.isOpenOutside,
-            "memo": graph.memo,
-            "Reference": graph.Reference,
-        });
+        nodes.push(getNodeFrom(graph));
 
         if (graph.Reference) {
             let refs = graph.Reference.split(',');
             for (let ref of refs) {
-                if (ref.startsWith("API")) {
-                    links.push({
-                        "source": graph.serviceId, "target": ref
-                    })
+                if (!ref.startsWith("API")) {
+                    // 非API
+                    let tmpNode = {
+                        "id": ref,
+                        "serviceId": ref,
+                        "controller": 'reference',
+                        "memo": '功能項',
+                    };
+                    let existed = nodes.filter(n => n.id === ref).length > 0;
+                    if (!existed) {
+                        nodes.push(tmpNode);
+                    }
                 }
+                links.push(getLink(graph.serviceId, ref))
             }
         }
     }
@@ -138,6 +130,41 @@ function graphDataBuilder(graphs) {
 
     return {nodes, links};
 }
+
+/**
+ * 產生圖形
+ * @param graph
+ * @returns
+ */
+function getNodeFrom(graph) {
+    return {
+        "id": graph.serviceId,
+        "serviceId": graph.serviceId,
+        "name": graph.func,
+        "path": graph.path,
+        "project": graph.project,
+        "contextPath": graph.contextPath,
+        "controller": graph.controller,
+        "method": graph.method,
+        "api": graph.api,
+        "isOpenOutside": graph.isOpenOutside,
+        "memo": graph.memo,
+        "Reference": graph.Reference,
+    };
+}
+
+/**
+ * 產生連結物件
+ * @param source
+ * @param ref
+ * @returns {{source, target}}
+ */
+function getLink(source, ref) {
+    return {
+        "source": source, "target": ref
+    };
+}
+
 
 /**
  * 畫圓圈節點
