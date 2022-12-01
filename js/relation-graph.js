@@ -8,6 +8,11 @@ var detail = document.getElementById('detail')
 var container = document.getElementById('container')
 var graph = document.getElementById('graph')
 
+/**
+ * 畫圖
+ * @param graphObj
+ * @param visibility
+ */
 function draw(graphObj, visibility) {
 
     console.log("開始畫圖...");
@@ -33,6 +38,8 @@ function draw(graphObj, visibility) {
             const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); // some padding
 
             ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+
+            // 圖形
             ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
 
             ctx.textAlign = 'center';
@@ -66,6 +73,12 @@ function adjustGraphSize(graph) {
     graph.width(container.offsetWidth).height(window.innerHeight - 100)
 }
 
+/**
+ * 製作圖形物件
+ * @param graphs
+ * @param visibility
+ * @returns {{nodes: *[], links: *[]}}
+ */
 function graphDataBuilder(graphs, visibility) {
 
     console.log("製作圖型物件...");
@@ -117,4 +130,22 @@ function graphDataBuilder(graphs, visibility) {
     }
 
     return {nodes, links};
+}
+
+/**
+ * 畫圓圈節點
+ * @param ctx
+ * @param node
+ * @param width
+ */
+function drawCircle(ctx, node, width) {
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, width, 0, 2 * Math.PI);
+    ctx.strokeStyle = node.color;
+    ctx.stroke();
+
+    ctx.shadowColor = 'rgba(105, 105, 105, .3)';
+    ctx.shadowBlur = 1;
+    ctx.shadowOffsetX = 1;
+    ctx.shadowOffsetY = 1;
 }

@@ -16,15 +16,15 @@
 </head>
 
 <body>
-  <div>API關聯圖</div>
-  <div>
+  <div class="dashboard">
+    <div>API關聯圖</div>
     <input type="file" id="file-selector"/>
     <button onclick="upload();">畫圖</button>
     <label for="visibility">
       <input type="checkbox" id="visibility">隱藏
     </label>
+    <div><small>※點擊圖形顯示詳細資訊於下方</small></div>
   </div>
-  <small>※點擊圖形顯示詳細資訊於下方</small>
 
   <div class="wrapper">
     <div id="container">
@@ -58,9 +58,9 @@
 
 </script>
 
-<script src="https://unpkg.com/force-graph"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+<script src="js/lib/http_unpkg.com_force-graph.js"></script>
+<script src="js/lib/http_cdnjs.cloudflare.com_ajax_libs_xlsx_0.8.0_jszip.js"></script>
+<script src="js/lib/http_cdnjs.cloudflare.com_ajax_libs_xlsx_0.8.0_xlsx.js"></script>
 <script src="js/relation-graph.js"></script>
 <script src="js/xlsx-reader.js"></script>
 </html>
