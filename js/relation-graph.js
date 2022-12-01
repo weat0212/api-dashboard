@@ -225,3 +225,11 @@ function drawCircle(ctx, node, width) {
     ctx.shadowOffsetX = 1;
     ctx.shadowOffsetY = 1;
 }
+
+function zoomInTarget(target) {
+    const found = data.nodes.filter(t => t.id === target)[0];
+    if (found) {
+        Graph.centerAt(found.x, found.y, 1000);
+        Graph.zoom(8, 1500);
+    }
+}

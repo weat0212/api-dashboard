@@ -17,12 +17,16 @@
 
 <body>
   <div class="dashboard">
-    <div>API關聯圖</div>
+    <div class="title">API關聯圖</div>
     <input type="file" id="file-selector"/>
-    <button onclick="upload();">畫圖</button>
     <label for="visibility">
       <input type="checkbox" id="visibility">隱藏
     </label>
+    <button onclick="upload();">畫圖</button>
+    <label>
+      / 節點編號：<input type="text" id="search"/>
+    </label>
+    <button onclick="search()">搜尋</button>
     <div><small>※點擊圖形「顯示詳細資訊」於右方</small></div>
   </div>
 
@@ -53,6 +57,16 @@
     } catch (ex) {
       alert('未選擇檔案');
       fileSelector.click();
+    }
+  }
+
+  function search() {
+    const inputVal = document.getElementById('search').value;
+    try {
+      zoomInTarget(inputVal);
+    } catch (ex) {
+      console.log(ex)
+      alert("請先繪圖");
     }
   }
 
