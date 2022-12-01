@@ -61,9 +61,12 @@
   }
 
   function search() {
-    const inputVal = document.getElementById('search').value;
+    let inputVal = document.getElementById('search').value;
     try {
-      zoomInTarget(inputVal);
+      if (inputVal) {
+        inputVal = inputVal.toUpperCase();
+        zoomInTarget(inputVal);
+      }
     } catch (ex) {
       console.log(ex)
       alert("請先繪圖");

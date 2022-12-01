@@ -120,7 +120,7 @@ function graphDataBuilder(graphs) {
     for (let graph of graphs) {
         if (!graph.serviceId) { continue; }
 
-        nodes.push(getNodeFrom(graph));
+        nodes.push(createNodeFrom(graph));
 
         if (graph.Reference) {
             let refs = graph.Reference.split(',');
@@ -140,7 +140,7 @@ function graphDataBuilder(graphs) {
                         nodes.push(tmpNode);
                     }
                 }
-                links.push(getLink(graph.serviceId, ref))
+                links.push(createLinkFrom(ref, graph.serviceId))
             }
         }
     }
@@ -176,7 +176,7 @@ function graphDataBuilder(graphs) {
  * @param graph
  * @returns
  */
-function getNodeFrom(graph) {
+function createNodeFrom(graph) {
     return {
         "id": graph.serviceId,
         "serviceId": graph.serviceId,
@@ -201,7 +201,7 @@ function getNodeFrom(graph) {
  * @param ref
  * @returns {{source, target}}
  */
-function getLink(source, ref) {
+function createLinkFrom(source, ref) {
     return {
         "source": source, "target": ref
     };
