@@ -48,7 +48,9 @@ function draw(graphObj, visibility) {
             bckgDimensions && ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
         })
         .linkWidth(3)
-        .linkDirectionalArrowLength(8);
+        .linkDirectionalArrowLength(8)
+        .linkDirectionalParticles(1)
+        .linkDirectionalParticleSpeed(d => 0.005);
 
     adjustGraphSize(Graph)
     window.addEventListener('resize', () => {
