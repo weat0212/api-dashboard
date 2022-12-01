@@ -1,22 +1,23 @@
-var Graph = ForceGraph();
-var data = {
+let Graph = ForceGraph();
+let data = {
     "nodes": [],
     "links": []
 }
 
-var detail = document.getElementById('detail')
-var container = document.getElementById('container')
-var graph = document.getElementById('graph')
+let detail = document.getElementById('detail');
+let container = document.getElementById('container');
+let graph = document.getElementById('graph');
+let hide = document.getElementById('visibility');
 
 /**
  * 畫圖
  * @param graphObj
- * @param visibility
+ * @param hide
  */
-function draw(graphObj, visibility) {
+function draw(graphObj) {
 
     console.log("開始畫圖...");
-    data = graphDataBuilder(graphObj, visibility);
+    data = graphDataBuilder(graphObj);
 
     Graph(graph)
         .graphData(data)
@@ -27,6 +28,9 @@ function draw(graphObj, visibility) {
                 const div = detail.appendChild(document.createElement('div'));
                 div.textContent = `${key}:${value}`;
             }
+            // Center/zoom on node
+            Graph.centerAt(node.x, node.y, 1000);
+            Graph.zoom(8, 2000);
         })
         .nodeAutoColorBy('controller')
         .nodeLabel('memo')
@@ -62,7 +66,11 @@ function draw(graphObj, visibility) {
     adjustGraphSize(Graph)
     window.addEventListener('resize', () => {
         adjustGraphSize(Graph)
-    })
+    });
+
+    if (hide.checked) {
+        graph.zoom(3, 2000);
+    }
 }
 
 function removeChildren(dom) {
@@ -70,16 +78,15 @@ function removeChildren(dom) {
 }
 
 function adjustGraphSize(graph) {
-    graph.width(container.offsetWidth).height(window.innerHeight - 100)
+    graph.width(container.offsetWidth).height(window.innerHeight - 100);
 }
 
 /**
  * 製作圖形物件
  * @param graphs
- * @param visibility
  * @returns {{nodes: *[], links: *[]}}
  */
-function graphDataBuilder(graphs, visibility) {
+function graphDataBuilder(graphs) {
 
     console.log("製作圖型物件...");
     console.log(graphs);
@@ -117,7 +124,7 @@ function graphDataBuilder(graphs, visibility) {
         }
     }
 
-    if (visibility) {
+    if (hide.checked) {
         nodes = nodes.filter(n => {
             let show = false;
             links.forEach(l => {

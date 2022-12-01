@@ -45,10 +45,10 @@
   });
 
   function upload() {
-    const visibility = document.getElementById('visibility').checked;
+
     try {
       excelReader(fileList[0]).then(graph => {
-        draw(graph[0], visibility);
+        draw(graph[0], hide.checked);
       })
     } catch (ex) {
       alert('未選擇檔案');
