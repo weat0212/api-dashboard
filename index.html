@@ -17,13 +17,14 @@
 
 <body>
   <div>API關聯圖</div>
-  <div><input type="file" id="file-selector"/></div>
   <div>
+    <input type="file" id="file-selector"/>
     <button onclick="upload();">畫圖</button>
     <label for="visibility">
       <input type="checkbox" id="visibility">隱藏
     </label>
   </div>
+  <small>※點擊圖形顯示詳細資訊於下方</small>
 
   <div class="wrapper">
     <div id="container">
@@ -51,6 +52,7 @@
       })
     } catch (ex) {
       alert('未選擇檔案');
+      fileSelector.click();
     }
   }
 
