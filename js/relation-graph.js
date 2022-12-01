@@ -9,6 +9,13 @@ let container = document.getElementById('container');
 let graph = document.getElementById('graph');
 let hide = document.getElementById('visibility');
 
+// 節點顏色
+const TEXT_COLOR = 'controller';
+// 節點提示
+const NODE_LABEL = 'memo';
+// 指標Hover顏色
+const HOVER_COLOR = 'rgba(106, 90, 205, 0.2)';
+
 /**
  * 畫圖
  * @param graphObj
@@ -59,8 +66,8 @@ function draw(graphObj) {
             }
         })
         .autoPauseRedraw(false)
-        .nodeAutoColorBy('controller')
-        .nodeLabel('memo')
+        .nodeAutoColorBy(TEXT_COLOR)
+        .nodeLabel(NODE_LABEL)
         .nodeCanvasObject((node, ctx, globalScale) => {
             const label = node.id;
             const fontSize = 16/globalScale;
@@ -70,7 +77,7 @@ function draw(graphObj) {
 
             // 圖形
             const isSelected = node === hoverNode;
-            ctx.fillStyle = isSelected ? 'rgba(255, 255, 0, 0.5)' : 'rgba(255, 255, 255, 0.8)';
+            ctx.fillStyle = isSelected ? HOVER_COLOR : 'rgba(255, 255, 255, 0.8)';
             ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -131,7 +138,7 @@ function graphDataBuilder(graphs) {
                         "id": ref,
                         "serviceId": ref,
                         "controller": 'reference',
-                        "memo": '功能項',
+                        "memo": '主要功能項',
                         "neighbors": [],
                         "links": [],
                     };
